@@ -1,4 +1,5 @@
-﻿using PetStoreEFData.Models;
+﻿using PetStoreEFData.DataAccess;
+using PetStoreEFData.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,16 @@ namespace PetStore.Services.Data
 {
     public class PetTypeRepository : IPetTypeRepository
     {
-        public List<IPetType> GetPetTypes()
+        protected readonly PetContext _context;
+        public PetTypeRepository(PetContext context)
         {
-            return new List<IPetType>();
+            _context = context;
+        }
+        public IEnumerable<IPetType> GetPetTypes()
+        {
+            var petTypes = _context.PetTypes.ToList();
+
+            return petTypes;
         }
     }
 }

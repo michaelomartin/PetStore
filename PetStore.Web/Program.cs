@@ -1,6 +1,9 @@
 using Serilog;
 using Microsoft.Extensions.Hosting;
 using PetStore.Services.Data;
+using PetStoreEFData.DataAccess;
+using System.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,9 @@ builder.Host.UseSerilog((context, config) =>
 builder.Services.AddScoped<IPetProcessor, PetProcessor>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetTypeRepository, PetTypeRepository>();
+
+var connectionString = builder.Configuration.GetConnectionString("PetStoreConnection");
+builder.Services.AddDbContext<PetContext>(x => x.UseSqlServer(connectionString));
 
 
 var app = builder.Build();

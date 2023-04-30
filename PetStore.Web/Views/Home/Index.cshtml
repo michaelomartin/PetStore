@@ -10,7 +10,7 @@
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> @TempData["CustomError"]
+        <strong>Error!</strong> @TempData["ErrorMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
@@ -24,8 +24,45 @@
 }
 
 <div class="text-right">
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Add New Pet</a>
 </div>
+
+<br />
+<br />
+
+<div class="card">
+    <h5 class="card-header">Search</h5>
+    <div class="card-body">
+<form asp-action="Index" method="get">
+    <div class="form-actions">
+        <div class="row">
+            <div class="col">
+                <label for="petName" class="form-label">Search by Pet Name</label>
+                <input type="text" class="form-control" placeholder="Search for pet by name:" aria-label="Search for pet by name:" name="petName" value="@Model.PetName">
+            </div>
+            <div class="col">
+                <label for="petType" class="form-label">Search by Pet Type</label>
+                <select class="form-select" placeholder="Pet Type:" aria-label="Pet Type:" name="petTypeId" asp-items="@(new SelectList(Model.PetTypes,"Value","Text",Model.PetTypeId))"> </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                
+            </div>
+            <div class="col">
+                <input type="submit" value="Search" class="btn btn-primary" />
+                <a asp-action="Index">Reset</a>
+            </div>
+        </div>
+      
+    </div>
+</form>
+</div>
+</div>
+
+<br />
+<br />
 
 <table class="table">
     <thead>
@@ -34,16 +71,16 @@
                 Id
             </th>
             <th>
-                Name
+                <a asp-action="Index" asp-route-sortOrder="Name" asp-route-petName="@Model.PetName" asp-route-petTypeId="@Model.PetTypeId">Name</a>
             </th>
             <th>
                 Type Of Pet
             </th>
             <th>
-                Date Of Birth
+                <a asp-action="Index" asp-route-sortOrder="DateOfBirth" asp-route-petName="@Model.PetName" asp-route-petTypeId="@Model.PetTypeId">Date Of Birth</a>
             </th>
             <th>
-                Weight (Kgs)
+                <a asp-action="Index" asp-route-sortOrder="Weight" asp-route-petName="@Model.PetName" asp-route-petTypeId="@Model.PetTypeId">Weight (Kgs)</a>
             </th>
             <th></th>
         </tr>
@@ -59,7 +96,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PetTypeId)
+                    @Html.DisplayFor(modelItem => item.PetType.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateOfBirth)
@@ -68,8 +105,8 @@
                     @Html.DisplayFor(modelItem => item.Weight)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="confirm('Are you sure you want to delete this pet?')">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to delete this pet?')" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

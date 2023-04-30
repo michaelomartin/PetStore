@@ -4,6 +4,6 @@ namespace PetStore.Services.Data
 {
     public interface IPetTypeRepository
     {
-        List<IPetType> GetPetTypes();
+        IEnumerable<IPetType> GetPetTypes();
     }
 }

@@ -4,9 +4,9 @@ namespace PetStore.Services.Data
 {
     public interface IPetRepository
     {
-        List<IPet> GetPets(int? petTypeId, int? startPage, int? endPage, int? pageSize, string? petName);
+        IEnumerable<IPet> GetPets(int? petTypeId, int? startPage, int? endPage, int? pageSize, string? petName, string? sortOrder);
         IPet GetPet(int id);
 
-        List<IPet> GetPetsByNameDOB(string name, DateTime dateOfBirth);
+        IEnumerable<IPet> GetPetsByNameDOB(string name, DateTime dateOfBirth);
     }
 }

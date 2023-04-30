@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PetStore.Services.Data;
 using PetStore.Web.Models;
 using PetStoreEFData.Models;
@@ -24,14 +26,32 @@ namespace PetStore.Web.Controllers
             _petTypeRepository = petTypeRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string petName, int? petTypeId, string sortOrder)
         {
             var viewModel = new ListViewModel();
-            var pets = _petRepository.GetPets(null, null, null, null, null);
-            var petTypes = _petTypeRepository.GetPetTypes();
+            var pets = _petRepository.GetPets(petTypeId, null, null, null, petName,sortOrder);
+            var petTypes = _petTypeRepository.GetPetTypes().ToList();
+
+
+            var petTypesSelectList = petTypes
+                          .Select(a => new SelectListItem()
+                          {
+                              Value = a.Id.ToString(),
+                              Text = a.Name
+                          })
+                          .ToList();
+            petTypesSelectList.Insert(0, new SelectListItem { Value = "", Text = "" }); // Add empty row to start of drop down list
+
+
+            viewModel.PetName = petName;
+            viewModel.PetTypeId = petTypeId;
+            //if (!String.IsNullOrEmpty(petName))
+            //{
+            //    pets = pets.Where(s => s.Name.Contains(petName, StringComparison.InvariantCultureIgnoreCase));
+            //}
 
             viewModel.Pets = pets;
-            viewModel.PetTypes = petTypes;
+            viewModel.PetTypes = petTypesSelectList;
 
             return View(viewModel);
         }
@@ -41,6 +61,10 @@ namespace PetStore.Web.Controllers
         public IActionResult Create() {
             
             var viewModel = new PetAddEditViewModel();
+
+            var petTypes = _petTypeRepository.GetPetTypes();
+
+            ViewBag.PetTypes = petTypes;
 
             return View(viewModel);
         }
@@ -57,7 +81,7 @@ namespace PetStore.Web.Controllers
                     // Does the Pet already exist?
                     var existingPets = _petRepository.GetPetsByNameDOB(viewModel.Name, viewModel.DateOfBirth);
 
-                    if (existingPets != null)
+                    if ((existingPets != null) && (existingPets.Count() > 0))
                     {
                         var errorMessage = "Unable to create new pet record. Pet with the same Name and Date Of Birth already exists.";
                         _logger.LogError(errorMessage);
@@ -72,6 +96,14 @@ namespace PetStore.Web.Controllers
 
                     return RedirectToAction(nameof(Index));
                 }
+                else
+                {
+                    var errorMessage = "Unable to create new pet record. " + string.Join(" - ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)); 
+                    _logger.LogError(errorMessage);
+                    ModelState.AddModelError("", errorMessage);
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -79,6 +111,11 @@ namespace PetStore.Web.Controllers
                 _logger.LogError(errorMessage);
                 ModelState.AddModelError("", errorMessage); 
             }
+
+            var petTypes = _petTypeRepository.GetPetTypes();
+
+            ViewBag.PetTypes = petTypes;
+
             return View(viewModel);
         }
 
@@ -108,9 +145,14 @@ namespace PetStore.Web.Controllers
 
             viewModel.Id = pet.Id;
             viewModel.Name = pet.Name;
-            viewModel.PetTypeId = pet.PetTypeId;
+            viewModel.PetTypeId = pet.PetType.Id;
             viewModel.DateOfBirth = pet.DateOfBirth;
             viewModel.Weight = pet.Weight;
+
+
+            var petTypes = _petTypeRepository.GetPetTypes();
+
+            ViewBag.PetTypes = petTypes;
 
             return View(viewModel);
         }
@@ -148,6 +190,12 @@ namespace PetStore.Web.Controllers
 
                     return RedirectToAction(nameof(Index));
                 }
+                else
+                {
+                    var errorMessage = "Unable to update pet record. " + string.Join(" - ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                    _logger.LogError(errorMessage);
+                    ModelState.AddModelError("", errorMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -155,6 +203,11 @@ namespace PetStore.Web.Controllers
                 _logger.LogError(errorMessage);
                 ModelState.AddModelError("", errorMessage);
             }
+
+            var petTypes = _petTypeRepository.GetPetTypes();
+
+            ViewBag.PetTypes = petTypes;
+
             return View(viewModel);
         }
 
