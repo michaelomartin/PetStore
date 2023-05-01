@@ -1,0 +1,25 @@
+2023-05-01 14:15:38.832 +10:00 [INF] User profile is available. Using 'C:\Users\m_mar\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-05-01 14:15:39.694 +10:00 [INF] Now listening on: https://localhost:7230
+2023-05-01 14:15:39.700 +10:00 [INF] Now listening on: http://localhost:5073
+2023-05-01 14:15:39.712 +10:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-05-01 14:15:39.716 +10:00 [INF] Hosting environment: Development
+2023-05-01 14:15:39.720 +10:00 [INF] Content root path: C:\Code\PetStore\PetStore.Web\
+2023-05-01 14:15:42.386 +10:00 [INF] Request starting HTTP/2 GET https://localhost:7230/ - -
+2023-05-01 14:15:42.778 +10:00 [INF] Executing endpoint 'PetStore.Web.Controllers.HomeController.Index (PetStore.Web)'
+2023-05-01 14:15:43.066 +10:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index(System.String, System.Nullable`1[System.Int32], System.String) on controller PetStore.Web.Controllers.HomeController (PetStore.Web).
+2023-05-01 14:15:49.902 +10:00 [WRN] No store type was specified for the decimal property 'Weight' on entity type 'Pet'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2023-05-01 14:15:56.280 +10:00 [INF] Executed DbCommand (210ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[DateOfBirth], [p].[Name], [p].[PetTypeId], [p].[Weight]
+FROM [Pets] AS [p]
+2023-05-01 14:15:56.908 +10:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Name]
+FROM [PetTypes] AS [p]
+2023-05-01 14:15:57.196 +10:00 [INF] Executing ViewResult, running view Index.
+2023-05-01 14:15:58.578 +10:00 [INF] Executed ViewResult - view Index executed in 1392.5754ms.
+2023-05-01 14:15:58.652 +10:00 [INF] Executed action PetStore.Web.Controllers.HomeController.Index (PetStore.Web) in 15561.1827ms
+2023-05-01 14:15:58.664 +10:00 [INF] Executed endpoint 'PetStore.Web.Controllers.HomeController.Index (PetStore.Web)'
+2023-05-01 14:15:59.019 +10:00 [INF] Request starting HTTP/2 GET https://localhost:7230/_framework/aspnetcore-browser-refresh.js - -
+2023-05-01 14:15:59.227 +10:00 [INF] Request finished HTTP/2 GET https://localhost:7230/_framework/aspnetcore-browser-refresh.js - - - 200 11994 application/javascript;+charset=utf-8 203.5651ms
+2023-05-01 14:15:59.249 +10:00 [INF] Request finished HTTP/2 GET https://localhost:7230/ - - - 200 - text/html;+charset=utf-8 16876.3920ms
+2023-05-01 14:16:00.188 +10:00 [INF] Request starting HTTP/2 GET https://localhost:7230/_vs/browserLink - -
+2023-05-01 14:16:01.092 +10:00 [INF] Request finished HTTP/2 GET https://localhost:7230/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 904.1336ms

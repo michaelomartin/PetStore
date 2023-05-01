@@ -11,17 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Use Serilog
-builder.Host.UseSerilog((context, config) =>
-{
-    config.WriteTo.Console();
-}
-);
+builder.Host.UseSerilog((ctx, lc) => lc
+    //.WriteTo.Console()
+    .WriteTo.File("log.txt") // Would be better to have logging into Application Insights in Azure
+    .ReadFrom.Configuration(ctx.Configuration)); // Use Appsettings.json for configuration
 
 // Inject business classes
 builder.Services.AddScoped<IPetProcessor, PetProcessor>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetTypeRepository, PetTypeRepository>();
 
+// Inject DB Context
 var connectionString = builder.Configuration.GetConnectionString("PetStoreConnection");
 builder.Services.AddDbContext<PetContext>(x => x.UseSqlServer(connectionString));
 
